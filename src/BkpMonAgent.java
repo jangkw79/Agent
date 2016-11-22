@@ -32,7 +32,7 @@ public class BkpMonAgent {
 	static String srcdbclass, srcdburl, srcuser, srcpasswd;
 	static String tgtdbclass, tgtdburl, tgtuser, tgtpasswd;
 	static String hostnm, agenthomedir,	oraclebkpdir, oraclearcdir, oracledbnm, 
-				  location, prcscmdstr, diskcmdstr, bkpcmdstr, bkpstatus, todaydate;
+				  location, prcscmdstr, diskcmdstr, bkpcmdstr, bkpstatus, todaydate, regdate;
 	static String dfrsltstr = "", bkprsltstr = "";
 	static int crontime;
 	static HashMap<String, String> hashbkpfile = new HashMap<String, String>();
@@ -48,6 +48,10 @@ public class BkpMonAgent {
 			SimpleDateFormat dayTime = new SimpleDateFormat("yyyyMMdd");
 			myDate.setTime(System.currentTimeMillis());
 			todaydate = dayTime.format(myDate);
+			
+			dayTime = new SimpleDateFormat("yyyyMMddHHmmss");
+			myDate.setTime(System.currentTimeMillis());
+			regdate = dayTime.format(myDate);
 			
 			LoadAgentInfo(args[0]); // Load Info
 			
@@ -339,8 +343,8 @@ public class BkpMonAgent {
 		    		+ " LOCATION,                 "
 		    		+ " CRONTIME,                 "
 		    		+ " DFRSLT,                   "
-		    		+ " BKPRSLT)                 "
-		    		+ "VALUES ( ?, ?, NOW(), ?, ?, ?, ?, ?, ? )";
+		    		+ " BKPRSLT )                 "
+		    		+ "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 		    
 		    pstmt = conn.prepareStatement(insquery_master);
 		    
@@ -358,12 +362,13 @@ public class BkpMonAgent {
 		    
 		    pstmt.setString(1, hostnm);
 		    pstmt.setString(2, oracledbnm);
-		    pstmt.setString(3, bkpstatus);
-		    pstmt.setString(4, dbtype);
-		    pstmt.setString(5, location);
-		    pstmt.setInt(6, crontime);
-		    pstmt.setString(7, dfrsltstr);
-		    pstmt.setString(8, bkprsltstr);
+		    pstmt.setString(3, regdate);
+		    pstmt.setString(4, bkpstatus);
+		    pstmt.setString(5, dbtype);
+		    pstmt.setString(6, location);
+		    pstmt.setInt(7, crontime);
+		    pstmt.setString(8, dfrsltstr);
+		    pstmt.setString(9, bkprsltstr);
 		    
 		    int inscnt_master = pstmt.executeUpdate();
 		    
@@ -376,7 +381,7 @@ public class BkpMonAgent {
 		    		+ " FILENAME,                 "
 		    		+ " FILESIZE,                 "
 		    		+ " MSG )                     "
-		    		+ "VALUES ( ?, ?, NOW(), ?, ?, ?, ? )";
+		    		+ "VALUES ( ?, ?, ?, ?, ?, ?, ? )";
 		    		
 		    
 		    pstmt = conn.prepareStatement(insquery_slave);
@@ -403,10 +408,11 @@ public class BkpMonAgent {
 				
 				pstmt.setString(1, hostnm);
 			    pstmt.setString(2, oracledbnm);
-			    pstmt.setString(3, entryval[0]);
-			    pstmt.setString(4, fileentry.getKey().toString());
-			    pstmt.setString(5, entryval[1]);
-			    pstmt.setString(6, entryval[2]);
+			    pstmt.setString(3, regdate);
+			    pstmt.setString(4, entryval[0]);
+			    pstmt.setString(5, fileentry.getKey().toString());
+			    pstmt.setString(6, entryval[1]);
+			    pstmt.setString(7, entryval[2]);
 			    
 			    inscnt_slave = pstmt.executeUpdate();
 			}
