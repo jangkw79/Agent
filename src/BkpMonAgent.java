@@ -333,13 +333,14 @@ public class BkpMonAgent {
 		    		  "INSERT INTO BkpmonMaster ( "
 		    		+ " HOSTNAME,                 "
 		    		+ " DBNAME,                   "
+		    		+ " REGDATE,                  "
 		    		+ " BACKUPSTATUS,             "
 		    		+ " DBTYPE,                   "
 		    		+ " LOCATION,                 "
 		    		+ " CRONTIME,                 "
 		    		+ " DFRSLT,                   "
 		    		+ " BKPRSLT)                 "
-		    		+ "VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )";
+		    		+ "VALUES ( ?, ?, NOW(), ?, ?, ?, ?, ?, ? )";
 		    
 		    pstmt = conn.prepareStatement(insquery_master);
 		    
@@ -370,11 +371,12 @@ public class BkpMonAgent {
 		    		  "INSERT INTO BkpmonSlave (  "
 		    		+ " HOSTNAME,                 "
 		    		+ " DBNAME,                   "
+		    		+ " REGDATE,                  "
 		    		+ " FILEDIR,                  "
 		    		+ " FILENAME,                 "
 		    		+ " FILESIZE,                 "
 		    		+ " MSG )                     "
-		    		+ "VALUES ( ?, ?, ?, ?, ?, ? )";
+		    		+ "VALUES ( ?, ?, NOW(), ?, ?, ?, ? )";
 		    		
 		    
 		    pstmt = conn.prepareStatement(insquery_slave);
